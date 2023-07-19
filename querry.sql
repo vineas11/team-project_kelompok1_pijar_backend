@@ -8,3 +8,4 @@ CREATE TABLE users
     users_password VARCHAR(255),
     users_photo VARCHAR(255)
 );
+
