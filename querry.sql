@@ -9,3 +9,13 @@ CREATE TABLE users
     users_photo VARCHAR(255)
 );
 
+CREATE TABLE recipes
+(
+    recipes_id VARCHAR PRIMARY KEY,
+    recipes_title VARCHAR(255),
+    recipes_ingredients VARCHAR(255) ,
+    recipes_photo VARCHAR(255),
+    recipes_video VARCHAR(255),
+    categorys_id INT,
+    users_id VARCHAR(255)
+);

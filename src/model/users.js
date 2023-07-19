@@ -63,6 +63,21 @@ const findUUID = (users_id) => {
   );
 };
 
+const findEmail = (users_email) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM users WHERE users_email= '${users_email}' `,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
+
 //COUNT DATA
 const countData = () => {
   return Pool.query(`SELECT COUNT(*) FROM users`);
@@ -75,5 +90,6 @@ module.exports = {
   createUsers,
   updateUsers,
   findUUID,
+  findEmail,
   countData,
 };
