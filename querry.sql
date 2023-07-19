@@ -8,3 +8,13 @@ CREATE TABLE users
     users_password VARCHAR(255),
     users_photo VARCHAR(255)
 );
+
+CREATE TABLE recipes(
+    recipes_id VARCHAR PRIMARY KEY PRIMARY KEY,
+    recipes_title VARCHAR(255),
+    recipes_ingredients VARCHAR(255) ,
+    recipes_photo VARCHAR(255),
+    recipes_video VARCHAR(255),
+    id_category INT,
+    id_user VARCHAR(255)a
+);
