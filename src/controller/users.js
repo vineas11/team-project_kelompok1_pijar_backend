@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Joi = require("joi");
 const authHelper = require("../helper/auth");
 const commonHelper = require("../helper/common");
 const cloudinary = require("../middlewares/cloudinary");
@@ -11,6 +12,7 @@ let {
   createUsers,
   updateUsers,
   findUUID,
+  findEmail,
   countData,
 } = require("../model/users");
 
@@ -65,21 +67,41 @@ let usersController = {
   },
 
   registerUsers: async (req, res) => {
-    const { users_name, users_email, users_phone, users_password } = req.body;
+    const {
+      users_name,
+      users_email,
+      users_phone,
+      users_password,
+      users_confirmpassword,
+    } = req.body;
     const { rowCount } = await findEmail(users_email);
     if (rowCount) {
       return res.json({ message: "Email Already Taken" });
     }
-    const users_passwordHash = bcrypt.hashSync(users_password);
     const users_id = uuidv4();
     const result = await cloudinary.uploader.upload(req.file.path);
     const users_photo = result.secure_url;
+    const schema = Joi.object().keys({
+      users_email: Joi.required(),
+      users_name: Joi.string().required(),
+      users_phone: Joi.string().min(10).max(12),
+      users_password: Joi.string().min(3).max(15).required(),
+      users_confirmpassword: Joi.ref("users_password"),
+    });
+    const { error, value } = schema.validate(req.body, {
+      abortEarly: false,
+    });
+    if (error) {
+      console.log(error);
+      return res.send(error.details);
+    }
+    const users_confirmpasswordHash = bcrypt.hashSync(users_confirmpassword);
     const data = {
       users_id,
       users_name,
       users_email,
       users_phone,
-      users_passwordHash,
+      users_confirmpasswordHash,
       users_photo,
     };
     createUsers(data)
@@ -96,21 +118,39 @@ let usersController = {
         users_email,
         users_phone,
         users_password,
-        users_photo,
+        users_confirmpassword,
       } = req.body;
       const users_id = String(req.params.id);
       const { rowCount } = await findUUID(users_id);
       if (!rowCount) {
         res.json({ message: "ID Not Found" });
       }
+      const schema = Joi.object().keys({
+        users_email: Joi.string().email().required(),
+        users_name: Joi.string().required(),
+        users_phone: Joi.string().min(10).max(12),
+        users_password: Joi.string().min(3).max(15).required(),
+        users_confirmpassword: Joi.ref("users_password"),
+      });
+      const { error, value } = schema.validate(req.body, {
+        abortEarly: false,
+      });
+      if (error) {
+        console.log(error);
+        return res.send(error.details);
+      }
+      const result = await cloudinary.uploader.upload(req.file.path);
+      const users_photo = result.secure_url;
+      const users_confirmpasswordHash = bcrypt.hashSync(users_confirmpassword);
       const data = {
         users_id,
         users_name,
         users_email,
         users_phone,
-        users_password,
+        users_confirmpasswordHash,
         users_photo,
       };
+
       updateUsers(data)
         .then((result) =>
           commonHelper.response(res, result.rows, 200, "Update Users Success")
@@ -139,7 +179,7 @@ let usersController = {
   },
 
   loginUsers: async (req, res) => {
-    const { users_email, users_password } = req.body;
+    const { users_email, users_confirmpassword } = req.body;
     const {
       rows: [users],
     } = await findEmail(users_email);
@@ -147,13 +187,13 @@ let usersController = {
       return res.json({ message: "Email Wrong" });
     }
     const isValidPassword = bcrypt.compareSync(
-      users_password,
-      users.users_password
+      users_confirmpassword,
+      users.users_confirmpassword
     );
     if (!isValidPassword) {
       return res.json({ message: "Password Wrong" });
     }
-    delete users.users_password;
+    delete users.users_confirmpassword;
     const payload = {
       users_email: users.users_email,
     };

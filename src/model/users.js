@@ -22,13 +22,14 @@ const createUsers = (data) => {
   const {
     users_id,
     users_email,
-    users_passwordHash,
+    users_password,
+    users_confirmpasswordHash,
     users_name,
     users_phone,
     users_photo,
   } = data;
-  return Pool.query(`INSERT INTO users(users_id, users_email, users_password, users_name, users_phone, users_photo) 
-    VALUES ('${users_id}','${users_email}','${users_passwordHash}','${users_name}',
+  return Pool.query(`INSERT INTO users(users_id, users_email, users_password, users_confirmpassword,  users_name, users_phone, users_photo) 
+    VALUES ('${users_id}','${users_email}','${users_password}','${users_confirmpasswordHash}','${users_name}',
     '${users_phone}','${users_photo}')`);
 };
 
@@ -38,12 +39,13 @@ const updateUsers = (data) => {
     users_id,
     users_email,
     users_password,
+    users_confirmpasswordHash,
     users_name,
     users_phone,
     users_photo,
   } = data;
   return Pool.query(
-    `UPDATE users SET users_photo = '${users_photo}', users_email = '${users_email}', users_password = '${users_password}', users_name = '${users_name}', users_phone = '${users_phone}' WHERE users_id = '${users_id}'`
+    `UPDATE users SET users_photo = '${users_photo}', users_email = '${users_email}', users_password = '${users_password}', users_confirmpassword = '${users_confirmpasswordHash}', users_name = '${users_name}', users_phone = '${users_phone}' WHERE users_id = '${users_id}'`
   );
 };
 
@@ -52,6 +54,21 @@ const findUUID = (users_id) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT * FROM users WHERE users_id= '${users_id}' `,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
+
+const findEmail = (users_email) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM users WHERE users_email= '${users_email}' `,
       (error, result) => {
         if (!error) {
           resolve(result);
@@ -75,5 +92,6 @@ module.exports = {
   createUsers,
   updateUsers,
   findUUID,
+  findEmail,
   countData,
 };
