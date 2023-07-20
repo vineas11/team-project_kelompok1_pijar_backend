@@ -17,6 +17,7 @@ CREATE TABLE recipes
     recipes_ingredients VARCHAR(255) ,
     recipes_photo VARCHAR(255),
     recipes_video VARCHAR(255),
+    recipes_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     categorys_id INT,
     users_id VARCHAR(255)
 );
@@ -32,6 +33,7 @@ CREATE TABLE video
 (
     video_id VARCHAR PRIMARY KEY,
     video_title VARCHAR(255),
+    video_url VARCHAR(255),
     video_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     recipes_id VARCHAR(255)
 )
