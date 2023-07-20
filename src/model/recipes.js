@@ -13,7 +13,7 @@ const selectRecipesByUserId = (users_id) => {
   return Pool.query(`
   SELECT *
   FROM recipes
-  LEFT JOIN users ON recipes.users_id = users.id
+  LEFT JOIN users ON recipes.users_id = users.users_id
   WHERE recipes.users_id='${users_id}'`);
 };
 
@@ -45,7 +45,7 @@ const updateRecipes = (data) => {
     users_id,
   } = data;
   return Pool.query(
-    `UPDATE recipes SET categorys_id=${categorys_id}, recipes_title='${recipes_title}', recipes_ingredients='${recipes_ingredients}' ,recipes_photo='${recipes_photo}' ,recipes_video='${recipes_video}', users_id='${users_id}' WHERE recipes_id='${recipes_id}'`
+    `UPDATE recipes SET categorys_id=${categorys_id}, recipes_title='${recipes_title}', recipes_ingredients='${recipes_ingredients}' ,recipes_photo='${recipes_photo}',recipes_video='${recipes_video}' , users_id='${users_id}' WHERE recipes_id='${recipes_id}'`
   );
 };
 
@@ -63,7 +63,7 @@ const countData = () => {
 const findUUID = (recipes_id) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT id FROM recipes WHERE recipes_id='${recipes_id}'`,
+      `SELECT recipes FROM recipes WHERE recipes_id='${recipes_id}'`,
       (error, result) => {
         if (!error) {
           resolve(result);

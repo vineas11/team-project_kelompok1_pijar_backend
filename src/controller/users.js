@@ -150,6 +150,7 @@ let usersController = {
         users_confirmpasswordHash,
         users_photo,
       };
+
       updateUsers(data)
         .then((result) =>
           commonHelper.response(res, result.rows, 200, "Update Users Success")
@@ -179,12 +180,6 @@ let usersController = {
 
   loginUsers: async (req, res) => {
     const { users_email, users_confirmpassword } = req.body;
-    // const {
-    //   rows: [users],
-    // } = await findEmail(users_email);
-    // if (!users) {
-    //   return res.json({ message: "Email Wrong" });
-    // }
     const {
       rows: [users],
     } = await findEmail(users_email);

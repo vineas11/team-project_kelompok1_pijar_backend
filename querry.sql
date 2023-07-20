@@ -6,6 +6,7 @@ CREATE TABLE users
     users_email VARCHAR(255),
     users_phone VARCHAR(255),
     users_password VARCHAR(255),
+    users_confirmpassword VARCHAR(255),
     users_photo VARCHAR(255)
 );
 
@@ -24,4 +25,13 @@ CREATE TABLE categorys
 (
     categorys_id INT PRIMARY KEY,
     categorys_name VARCHAR(255)
+)
+
+
+CREATE TABLE video
+(
+    video_id VARCHAR PRIMARY KEY,
+    video_title VARCHAR(255),
+    video_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    recipes_id VARCHAR(255)
 )

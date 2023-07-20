@@ -46,7 +46,7 @@ const recipesController = {
   },
 
   getRecipesByUserId: (req, res, next) => {
-    const users_id = req.params.users_id.trim();
+    const users_id = String(req.params.users_id);
     selectRecipesByUserId(users_id)
       .then((result) =>
         commonHelper.response(res, result.rows, 200, "get data success")
@@ -55,20 +55,22 @@ const recipesController = {
   },
 
   insertRecipes: async (req, res) => {
-    // const recipes_video = req.files["video"][0].filename;
-    // const recipes_photo = req.files["photo"][0].filename;
     const result = await cloudinary.uploader.upload(req.file.path);
-    const recipes_video = result.secure_url;
     const recipes_photo = result.secure_url;
-    const { categorys_id, recipes_title, recipes_ingredients, users_id } =
-      req.body;
+    const {
+      categorys_id,
+      recipes_title,
+      recipes_ingredients,
+      users_id,
+      recipes_video,
+    } = req.body;
     const recipes_id = uuidv4();
     const data = {
       recipes_id,
       recipes_title,
       recipes_ingredients,
-      recipes_video,
       recipes_photo,
+      recipes_video,
       categorys_id,
       users_id,
     };
@@ -82,9 +84,14 @@ const recipesController = {
   updateRecipe: async (req, res) => {
     try {
       const recipes_id = String(req.params.recipes_id);
-      const recipes_video = req.files["video"][0].filename;
-      const recipes_photo = req.files["photo"][0].filename;
-      const { categorys_id, recipes_title, recipes_ingredients } = req.body;
+      const result = await cloudinary.uploader.upload(req.file.path);
+      const recipes_photo = result.secure_url;
+      const {
+        categorys_id,
+        recipes_title,
+        recipes_ingredients,
+        recipes_video,
+      } = req.body;
       const { rowCount } = await findUUID(recipes_id);
       if (!rowCount) {
         return next(createError(403, "ID is Not Found"));
@@ -93,8 +100,8 @@ const recipesController = {
         recipes_id,
         recipes_title,
         recipes_ingredients,
-        recipes_video: `http://localhost:3000/video/${video}`,
-        recipes_photo: `http://localhost:3000/img/${photo}`,
+        recipes_photo,
+        recipes_video,
         categorys_id,
       };
       updateRecipes(data)
@@ -108,7 +115,7 @@ const recipesController = {
   },
   deleteRecipe: async (req, res, next) => {
     try {
-      const recipes_id = String(req.params.recipes_id);
+      const recipes_id = String(req.params.id);
       const { rowCount } = await findUUID(recipes_id);
       if (!rowCount) {
         return next(createError(403, "ID is Not Found"));
