@@ -11,6 +11,7 @@ let {
   createUsers,
   updateUsers,
   findUUID,
+  findEmail,
   countData,
 } = require("../model/users");
 
