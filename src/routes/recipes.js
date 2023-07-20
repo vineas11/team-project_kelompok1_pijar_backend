@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../middlewares/upload");
+const uploadRecipes = require("../middlewares/uploadRecipes");
 const recipesController = require("../controller/recipes");
 
 router
   .get("/", recipesController.getAllRecipes)
-  .get("/:id_user", recipesController.getRecipesByUserId)
-  .post("/", upload, recipesController.insertRecipes)
-  .put("/:id", upload, recipesController.updateRecipe)
+  .get("/:users_id", recipesController.getRecipesByUserId)
+  .post("/", uploadRecipes, recipesController.insertRecipes)
+  .put("/:id", uploadRecipes, recipesController.updateRecipe)
   .delete("/:id", recipesController.deleteRecipe);
 
 module.exports = router;
