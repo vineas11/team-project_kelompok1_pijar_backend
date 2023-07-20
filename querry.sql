@@ -10,7 +10,6 @@ CREATE TABLE users
     users_photo VARCHAR(255)
 );
 
--- TABLE RECIPES
 CREATE TABLE recipes
 (
     recipes_id VARCHAR PRIMARY KEY,
@@ -23,24 +22,13 @@ CREATE TABLE recipes
     users_id VARCHAR(255)
 );
 
--- TABLE CATEGORYS
 CREATE TABLE categorys
 (
     categorys_id INT PRIMARY KEY,
     categorys_name VARCHAR(255)
-);
+)
 
-
-CREATE TABLE video
-(
-    video_id VARCHAR PRIMARY KEY,
-    video_title VARCHAR(255),
-    video_url VARCHAR(255),
-    video_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    recipes_id VARCHAR(255)
-);
-
-CREATE TABLE comments 
+CREATE TABLE comments
 (
     comment_id INT PRIMARY KEY,
     recipes_id VARCHAR(255),
@@ -49,3 +37,16 @@ CREATE TABLE comments
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE likeds
+(
+    likeds_id INT PRIMARY KEY,
+    recipes_id VARCHAR(255),
+    users_id VARCHAR(255)
+);
+
+CREATE TABLE bookmarks
+(
+    bookmarks_id INT PRIMARY KEY,
+    recipes_id VARCHAR(255),
+    users_id VARCHAR(255)
+);

@@ -1,23 +1,23 @@
 const commonHelper = require("../helper/common");
 const {
-  selectAllComments,
-  selectComments,
-  insertComments,
-  updateComments,
-  deleteComments,
+  selectAllLikeds,
+  selectLikeds,
+  insertLikeds,
+  updateLikeds,
+  deleteLikeds,
   countData,
   findID,
-} = require("../model/comments");
+} = require("../model/likeds");
 
-const commentsController = {
-  getAllComments: async (req, res) => {
+const likedsController = {
+  getAllLikeds: async (req, res) => {
     try {
       const page = Number(req.query.page) || 1;
       const limit = Number(req.query.limit) || 100;
       const offset = (page - 1) * limit;
-      const sortby = req.query.sortby || "comment_id";
+      const sortby = req.query.sortby || "likeds_id";
       const sort = req.query.sort || "ASC";
-      const result = await selectAllComments({ limit, offset, sort, sortby });
+      const result = await selectAllLikeds({ limit, offset, sort, sortby });
       const {
         rows: [count],
       } = await countData();
@@ -42,40 +42,39 @@ const commentsController = {
     }
   },
 
-  getSelectComments: async (req, res) => {
-    const recipes_id = String(req.params.recipes_id);
-
-    selectComments(recipes_id)
+  getSelectLikeds: async (req, res) => {
+    const users_id = String(req.params.users_id);
+    selectLikeds(users_id)
       .then((result) =>
         commonHelper.response(res, result.rows, 200, "get data success")
       )
       .catch((err) => res.send(err));
   },
 
-  insertcomments: async (req, res) => {
-    const { recipes_id, users_id, comment_text } = req.body;
+  insertLikeds: async (req, res) => {
+    const { recipes_id, users_id } = req.body;
     const {
       rows: [count],
     } = await countData();
-    const comment_id = Number(count.count) + 1;
+    const likeds_id = Number(count.count) + 1;
     const data = {
-      comment_id,
+      likeds_id,
       recipes_id,
       users_id,
-      comment_text,
     };
-    insertComments(data)
+    insertLikeds(data)
       .then((result) =>
         commonHelper.response(res, result.rows, 201, "Comment Success")
       )
       .catch((err) => res.send(err));
   },
 
-  updateComments: async (req, res) => {
+  updateLikeds: async (req, res) => {
     try {
-      const { recipes_id, users_id, comment_text } = req.body;
-      const comment_id = Number(req.params.id);
-      const { rowCount } = await findID(comment_id);
+      const likeds_id = Number(req.params.id);
+      const { comment_text } = req.body;
+      const { rowCount } = await findID(likeds_id);
+
       if (!rowCount) {
         res.json({ message: "ID Not Found" });
       }
@@ -85,7 +84,7 @@ const commentsController = {
         users_id,
         comment_text,
       };
-      updateComments(data)
+      updateLikeds(data)
         .then((result) =>
           commonHelper.response(res, result.rows, 200, "Update comment Success")
         )
@@ -95,15 +94,15 @@ const commentsController = {
     }
   },
 
-  deleteComments: async (req, res, next) => {
+  deleteLikeds: async (req, res, next) => {
     try {
-      const comment_id = Number(req.params.id);
-      const { rowCount } = await findID(comment_id);
+      const likeds_id = Number(req.params.id);
+      const { rowCount } = await findID(likeds_id);
 
       if (!rowCount) {
         res.json({ message: "ID Not Found" });
       }
-      deleteComments(comment_id)
+      deleteLikeds(likeds_id)
         .then((result) =>
           commonHelper.response(res, result.rows, 200, "Delete comment Success")
         )
@@ -114,4 +113,4 @@ const commentsController = {
   },
 };
 
-module.exports = commentsController;
+module.exports = likedsController;
