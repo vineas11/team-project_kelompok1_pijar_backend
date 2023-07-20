@@ -19,3 +19,9 @@ CREATE TABLE recipes
     categorys_id INT,
     users_id VARCHAR(255)
 );
+
+CREATE TABLE categorys
+(
+    categorys_id INT PRIMARY KEY,
+    categorys_name VARCHAR(255)
+)

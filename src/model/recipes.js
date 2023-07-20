@@ -21,7 +21,7 @@ const selectRecipesByUserId = (users_id) => {
 const insertRecipes = (data) => {
   const {
     recipes_id,
-    category_id,
+    categorys_id,
     recipes_title,
     recipes_ingredients,
     recipes_photo,
@@ -29,7 +29,7 @@ const insertRecipes = (data) => {
     users_id,
   } = data;
   return Pool.query(
-    `INSERT INTO recipes (recipes_id, category_id, recipes_title, recipes_ingredients, recipes_photo, recipes_video, users_id) VALUES('${recipes_id}', ${category_id}, '${recipes_title}', '${recipes_ingredients}', '${recipes_photo}', '${recipes_video}', '${users_id}')`
+    `INSERT INTO recipes (recipes_id, categorys_id, recipes_title, recipes_ingredients, recipes_photo, recipes_video, users_id) VALUES('${recipes_id}', ${categorys_id}, '${recipes_title}', '${recipes_ingredients}', '${recipes_photo}', '${recipes_video}', '${users_id}')`
   );
 };
 
@@ -37,7 +37,7 @@ const insertRecipes = (data) => {
 const updateRecipes = (data) => {
   const {
     recipes_id,
-    category_id,
+    categorys_id,
     recipes_title,
     recipes_ingredients,
     recipes_photo,
@@ -45,7 +45,7 @@ const updateRecipes = (data) => {
     users_id,
   } = data;
   return Pool.query(
-    `UPDATE recipes SET category_id=${category_id}, recipes_title='${recipes_title}', recipes_ingredients='${recipes_ingredients}' ,recipes_photo='${recipes_photo}' ,recipes_video='${recipes_video}', users_id='${users_id}' WHERE recipes_id='${recipes_id}'`
+    `UPDATE recipes SET categorys_id=${categorys_id}, recipes_title='${recipes_title}', recipes_ingredients='${recipes_ingredients}' ,recipes_photo='${recipes_photo}' ,recipes_video='${recipes_video}', users_id='${users_id}' WHERE recipes_id='${recipes_id}'`
   );
 };
 
