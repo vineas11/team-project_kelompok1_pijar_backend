@@ -9,6 +9,7 @@ CREATE TABLE users
     users_photo VARCHAR(255)
 );
 
+-- TABLE RECIPES
 CREATE TABLE recipes
 (
     recipes_id VARCHAR PRIMARY KEY,
@@ -18,6 +19,23 @@ CREATE TABLE recipes
     recipes_video VARCHAR(255),
     categorys_id INT,
     users_id VARCHAR(255)
+);
+
+-- TABLE CATEGORYS
+CREATE TABLE categorys
+(
+    categorys_id INT PRIMARY KEY,
+    categorys_name VARCHAR(255)
+);
+
+-- TABLE COMMENTS
+CREATE TABLE comments
+(
+  comment_id INT PRIMARY KEY,
+  recipes_id VARCHAR,
+  users_id VARCHAR,
+  comment_text VARCHAR ,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
