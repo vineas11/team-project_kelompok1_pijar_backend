@@ -47,7 +47,7 @@ const recipesController = {
   },
 
   getRecipesById: (req, res, next) => {
-    const recipes_id = String(req.params.users_id);
+    const recipes_id = String(req.params.id);
     selectRecipesById(recipes_id)
       .then((result) =>
         commonHelper.response(res, result.rows, 200, "get data success")
