@@ -78,15 +78,20 @@ let usersController = {
     if (rowCount) {
       return res.json({ message: "Email Already Taken" });
     }
+
     const users_id = uuidv4();
-    const result = await cloudinary.uploader.upload(req.file.path);
-    const users_photo = result.secure_url;
+    let users_photo = null;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      users_photo = result.secure_url;
+    }
     const schema = Joi.object().keys({
       users_email: Joi.required(),
       users_name: Joi.string().required(),
       users_phone: Joi.string().min(10).max(12),
       users_password: Joi.string().min(3).max(15).required(),
       users_confirmpassword: Joi.ref("users_password"),
+      users_photo: Joi.string().allow(""),
     });
     const { error, value } = schema.validate(req.body, {
       abortEarly: false,
