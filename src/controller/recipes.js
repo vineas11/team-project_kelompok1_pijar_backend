@@ -4,6 +4,7 @@ const commonHelper = require("../helper/common");
 const cloudinary = require("../middlewares/cloudinary");
 const {
   selectAllRecipes,
+  selectRecipesById,
   selectRecipesByUserId,
   insertRecipes,
   updateRecipes,
@@ -43,6 +44,15 @@ const recipesController = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  getRecipesById: (req, res, next) => {
+    const recipes_id = String(req.params.id);
+    selectRecipesById(recipes_id)
+      .then((result) =>
+        commonHelper.response(res, result.rows, 200, "get data success")
+      )
+      .catch((err) => res.send(err));
   },
 
   getRecipesByUserId: (req, res, next) => {
