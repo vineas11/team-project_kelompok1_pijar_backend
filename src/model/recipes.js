@@ -8,6 +8,15 @@ const selectAllRecipes = ({ limit, offset, sort, sortby }) => {
   ORDER BY ${sortby} ${sort} LIMIT ${limit} OFFSET ${offset}`);
 };
 
+// SELECT RICAPES BY ID
+const selectRecipesById = (recipes_id) => {
+  return Pool.query(`
+  SELECT *
+  FROM recipes
+  WHERE recipes.recipes_id='${recipes_id}'`);
+};
+
+
 // SELECT RICAPES BY USERS ID
 const selectRecipesByUserId = (users_id) => {
   return Pool.query(`
@@ -74,6 +83,7 @@ const findUUID = (recipes_id) => {
 
 module.exports = {
   selectAllRecipes,
+  selectRecipesById,
   selectRecipesByUserId,
   insertRecipes,
   updateRecipes,
