@@ -4,6 +4,7 @@ const commonHelper = require("../helper/common");
 const cloudinary = require("../middlewares/cloudinary");
 const {
   selectAllRecipes,
+  selectRecipesById,
   selectRecipesByUserId,
   insertRecipes,
   updateRecipes,
@@ -45,6 +46,15 @@ const recipesController = {
     }
   },
 
+  getRecipesById: (req, res, next) => {
+    const recipes_id = String(req.params.id);
+    selectRecipesById(recipes_id)
+      .then((result) =>
+        commonHelper.response(res, result.rows, 200, "get data success")
+      )
+      .catch((err) => res.send(err));
+  },
+
   getRecipesByUserId: (req, res, next) => {
     const users_id = String(req.params.users_id);
     selectRecipesByUserId(users_id)
@@ -58,7 +68,6 @@ const recipesController = {
     const result = await cloudinary.uploader.upload(req.file.path);
     const recipes_photo = result.secure_url;
     const {
-      categorys_id,
       recipes_title,
       recipes_ingredients,
       users_id,
@@ -71,7 +80,6 @@ const recipesController = {
       recipes_ingredients,
       recipes_photo,
       recipes_video,
-      categorys_id,
       users_id,
     };
     insertRecipes(data)
@@ -87,7 +95,6 @@ const recipesController = {
       const result = await cloudinary.uploader.upload(req.file.path);
       const recipes_photo = result.secure_url;
       const {
-        categorys_id,
         recipes_title,
         recipes_ingredients,
         recipes_video,
@@ -97,7 +104,6 @@ const recipesController = {
         return next(createError(403, "ID is Not Found"));
       }
       const data = {
-        recipes_id,
         recipes_title,
         recipes_ingredients,
         recipes_photo,
