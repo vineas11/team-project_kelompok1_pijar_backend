@@ -59,6 +59,9 @@ const deleteRecipes = (recipes_id) => {
   return Pool.query(`DELETE FROM recipes WHERE recipes_id='${recipes_id}'`);
 };
 
+const deleteRecipesByUsersId = (users_id, recipes_id) => {
+  return Pool.query(`DELETE FROM recipes WHERE recipes.users_id='${users_id}' AND recipes.recipes_id='${recipes_id}'`);
+};
 // COUNT DATA
 const countData = () => {
   return Pool.query("SELECT COUNT(*) FROM recipes");
@@ -80,6 +83,22 @@ const findUUID = (recipes_id) => {
   );
 };
 
+// FIND UUID
+const findUsersId = (users_id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT recipes FROM recipes WHERE users_id='${users_id}'`,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   selectAllRecipes,
   selectRecipesById,
@@ -87,6 +106,8 @@ module.exports = {
   insertRecipes,
   updateRecipes,
   deleteRecipes,
+  deleteRecipesByUsersId,
   countData,
   findUUID,
+  findUsersId,
 };

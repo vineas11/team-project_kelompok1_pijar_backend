@@ -9,6 +9,8 @@ router
   .get("/users/:users_id", recipesController.getRecipesByUserId)
   .post("/", uploadRecipes, recipesController.insertRecipes)
   .put("/:id", uploadRecipes, recipesController.updateRecipes)
-  .delete("/:id", recipesController.deleteRecipe);
+  .delete("/:id", recipesController.deleteRecipe)
+  .delete("/users/:users_id/:recipes_id", recipesController.deleteRecipesByUsersId);
+
 
 module.exports = router;
