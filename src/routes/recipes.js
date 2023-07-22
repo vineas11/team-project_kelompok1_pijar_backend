@@ -5,10 +5,10 @@ const recipesController = require("../controller/recipes");
 
 router
   .get("/", recipesController.getAllRecipes)
-  .get("/detail/:recipes_id", recipesController.getRecipesById)
-  .get("/:users_id", recipesController.getRecipesByUserId)
+  .get("/:id", recipesController.getRecipesById)
+  .get("/users/:users_id", recipesController.getRecipesByUserId)
   .post("/", uploadRecipes, recipesController.insertRecipes)
-  .put("/:id", uploadRecipes, recipesController.updateRecipe)
+  .put("/:id", uploadRecipes, recipesController.updateRecipes)
   .delete("/:id", recipesController.deleteRecipe);
 
 module.exports = router;
