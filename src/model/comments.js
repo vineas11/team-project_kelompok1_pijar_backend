@@ -10,10 +10,10 @@ const selectAllComments = ({ limit, offset, sort, sortby }) => {
 // SELECT RICAPES BY product ID
 const selectComments = (recipes_id) => {
   return Pool.query(
-    `SELECT comments.*, users.* 
+     `SELECT comments.*, users.* 
     FROM comments 
     LEFT JOIN users 
-    ON comments.user_id = users.user_id 
+    ON comments.users_id = users.users_id 
     WHERE comments.recipes_id = '${recipes_id}'`
   );
 };
