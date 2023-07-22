@@ -22,12 +22,6 @@ CREATE TABLE recipes
     users_id VARCHAR(255)
 );
 
-CREATE TABLE categorys
-(
-    categorys_id INT PRIMARY KEY,
-    categorys_name VARCHAR(255)
-)
-
 CREATE TABLE comments
 (
     comment_id INT PRIMARY KEY,
