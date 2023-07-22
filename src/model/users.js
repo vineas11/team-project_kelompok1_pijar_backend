@@ -35,17 +35,17 @@ const createUsers = (data) => {
 
 //PUT SELECT USERS
 const updateUsers = (data) => {
-  const {
-    users_id,
-    users_email,
-    users_password,
-    users_confirmpasswordHash,
-    users_name,
-    users_phone,
-    users_photo,
-  } = data;
+  const { users_id, users_name, users_phone, users_photo } = data;
   return Pool.query(
-    `UPDATE users SET users_photo = '${users_photo}', users_email = '${users_email}', users_password = '${users_password}', users_confirmpassword = '${users_confirmpasswordHash}', users_name = '${users_name}', users_phone = '${users_phone}' WHERE users_id = '${users_id}'`
+    `UPDATE users SET users_photo = '${users_photo}', users_name = '${users_name}', users_phone = '${users_phone}' WHERE users_id = '${users_id}'`
+  );
+};
+
+const updatePasswordUsers = (data) => {
+  const { users_id, users_email, users_password, users_confirmpasswordHash } =
+    data;
+  return Pool.query(
+    `UPDATE users SET users_password = '${users_password}', users_confirmpassword = '${users_confirmpasswordHash}'WHERE users_id = '${users_id}'`
   );
 };
 
@@ -91,6 +91,7 @@ module.exports = {
   deleteUsers,
   createUsers,
   updateUsers,
+  updatePasswordUsers,
   findUUID,
   findEmail,
   countData,
