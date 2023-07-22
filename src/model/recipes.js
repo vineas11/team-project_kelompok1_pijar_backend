@@ -16,12 +16,12 @@ const selectRecipesById = (recipes_id) => {
   WHERE recipes.recipes_id='${recipes_id}'`);
 };
 
-
 // SELECT RICAPES BY USERS ID
 const selectRecipesByUserId = (users_id) => {
   return Pool.query(`
   SELECT *
   FROM recipes
+  LEFT JOIN users ON recipes.users_id = users.users_id
   WHERE recipes.users_id='${users_id}'`);
 };
 
