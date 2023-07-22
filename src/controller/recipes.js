@@ -47,7 +47,7 @@ const recipesController = {
   },
 
   getRecipesById: (req, res, next) => {
-    const recipes_id = String(req.params.id);
+    const recipes_id = String(req.params.recipes_id);
     selectRecipesById(recipes_id)
       .then((result) =>
         commonHelper.response(res, result.rows, 200, "get data success")
@@ -67,12 +67,8 @@ const recipesController = {
   insertRecipes: async (req, res) => {
     const result = await cloudinary.uploader.upload(req.file.path);
     const recipes_photo = result.secure_url;
-    const {
-      recipes_title,
-      recipes_ingredients,
-      users_id,
-      recipes_video,
-    } = req.body;
+    const { recipes_title, recipes_ingredients, users_id, recipes_video } =
+      req.body;
     const recipes_id = uuidv4();
     const data = {
       recipes_id,
@@ -94,11 +90,7 @@ const recipesController = {
       const recipes_id = String(req.params.recipes_id);
       const result = await cloudinary.uploader.upload(req.file.path);
       const recipes_photo = result.secure_url;
-      const {
-        recipes_title,
-        recipes_ingredients,
-        recipes_video,
-      } = req.body;
+      const { recipes_title, recipes_ingredients, recipes_video } = req.body;
       const { rowCount } = await findUUID(recipes_id);
       if (!rowCount) {
         return next(createError(403, "ID is Not Found"));
