@@ -8,5 +8,6 @@ router
   .get("/profile/:id", usersController.getSelectUsers)
   .get("/profile", usersController.getAllUsers)
   .put("/profile/:id", uploadUsers, usersController.updateUsers)
+  .put("/password/:id", uploadUsers, usersController.updatePasswordUsers)
   .delete("/profile/:id", usersController.deleteUsers);
 module.exports = router;

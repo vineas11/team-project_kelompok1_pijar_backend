@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const createError = require("http-errors");
 const commonHelper = require("../helper/common");
+const Joi = require("joi");
 const cloudinary = require("../middlewares/cloudinary");
 const {
   selectAllRecipes,
@@ -65,15 +66,29 @@ const recipesController = {
   },
 
   insertRecipes: async (req, res) => {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    const recipes_photo = result.secure_url;
-    const {
-      recipes_title,
-      recipes_ingredients,
-      users_id,
-      recipes_video,
-    } = req.body;
+    const { recipes_title, recipes_ingredients, users_id, recipes_video } =
+      req.body;
+
     const recipes_id = uuidv4();
+    const schema = Joi.object().keys({
+      recipes_photo: Joi.required(),
+      recipes_title: Joi.any(),
+      recipes_ingredients: Joi.any(),
+      users_id: Joi.any(),
+      recipes_video: Joi.any(),
+    });
+    const { error, value } = schema.validate(req.body, {
+      abortEarly: false,
+    });
+    if (error) {
+      console.log(error);
+      return res.send(error.details);
+    }
+    let recipes_photo = null;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      recipes_photo = result.secure_url;
+    }
     const data = {
       recipes_id,
       recipes_title,
@@ -89,26 +104,27 @@ const recipesController = {
       .catch((err) => res.send(err));
   },
 
-  updateRecipe: async (req, res) => {
+  updateRecipes: async (req, res) => {
     try {
-      const recipes_id = String(req.params.recipes_id);
-      const result = await cloudinary.uploader.upload(req.file.path);
-      const recipes_photo = result.secure_url;
-      const {
-        recipes_title,
-        recipes_ingredients,
-        recipes_video,
-      } = req.body;
+      const { recipes_title, recipes_ingredients, recipes_video } = req.body;
+      const recipes_id = String(req.params.id);
       const { rowCount } = await findUUID(recipes_id);
       if (!rowCount) {
         return next(createError(403, "ID is Not Found"));
       }
+
+      let recipes_photo = null;
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        recipes_photo = result.secure_url;
+      }
+
       const data = {
+        recipes_id,
         recipes_title,
         recipes_ingredients,
         recipes_photo,
         recipes_video,
-        categorys_id,
       };
       updateRecipes(data)
         .then((result) =>

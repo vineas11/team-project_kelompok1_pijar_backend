@@ -11,6 +11,7 @@ let {
   deleteUsers,
   createUsers,
   updateUsers,
+  updatePasswordUsers,
   findUUID,
   findEmail,
   countData,
@@ -118,23 +119,56 @@ let usersController = {
 
   updateUsers: async (req, res) => {
     try {
-      const {
-        users_name,
-        users_email,
-        users_phone,
-        users_password,
-        users_confirmpassword,
-      } = req.body;
+      const { users_name, users_phone } = req.body;
       const users_id = String(req.params.id);
       const { rowCount } = await findUUID(users_id);
       if (!rowCount) {
         res.json({ message: "ID Not Found" });
       }
       const schema = Joi.object().keys({
-        users_email: Joi.string().email().required(),
         users_name: Joi.string().required(),
         users_phone: Joi.string().min(10).max(12),
-        users_password: Joi.string().min(3).max(15).required(),
+        users_photo: Joi.any(),
+      });
+      const { error, value } = schema.validate(req.body, {
+        abortEarly: false,
+      });
+      if (error) {
+        console.log(error);
+        return res.send(error.details);
+      }
+      let users_photo = null;
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        users_photo = result.secure_url;
+      }
+      const data = {
+        users_id,
+        users_name,
+        users_phone,
+        users_photo,
+      };
+
+      updateUsers(data)
+        .then((result) =>
+          commonHelper.response(res, result.rows, 200, "Update Users Success")
+        )
+        .catch((err) => res.send(err));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  updatePasswordUsers: async (req, res) => {
+    try {
+      const { users_password, users_confirmpassword } = req.body;
+      const users_id = String(req.params.id);
+      const { rowCount } = await findUUID(users_id);
+      if (!rowCount) {
+        res.json({ message: "ID Not Found" });
+      }
+      const schema = Joi.object().keys({
+        users_password: Joi.string().min(3).max(15),
         users_confirmpassword: Joi.ref("users_password"),
       });
       const { error, value } = schema.validate(req.body, {
@@ -144,19 +178,18 @@ let usersController = {
         console.log(error);
         return res.send(error.details);
       }
-      const result = await cloudinary.uploader.upload(req.file.path);
-      const users_photo = result.secure_url;
+      let users_photo = null;
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        users_photo = result.secure_url;
+      }
       const users_confirmpasswordHash = bcrypt.hashSync(users_confirmpassword);
       const data = {
         users_id,
-        users_name,
-        users_email,
-        users_phone,
         users_confirmpasswordHash,
-        users_photo,
       };
 
-      updateUsers(data)
+      updatePasswordUsers(data)
         .then((result) =>
           commonHelper.response(res, result.rows, 200, "Update Users Success")
         )
