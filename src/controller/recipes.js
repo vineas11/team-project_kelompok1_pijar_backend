@@ -10,8 +10,10 @@ const {
   insertRecipes,
   updateRecipes,
   deleteRecipes,
+  deleteRecipesByUsersId,
   countData,
   findUUID,
+  findUsersId,
 } = require("../model/recipes");
 
 const recipesController = {
@@ -68,22 +70,7 @@ const recipesController = {
   insertRecipes: async (req, res) => {
     const { recipes_title, recipes_ingredients, users_id, recipes_video } =
       req.body;
-
     const recipes_id = uuidv4();
-    const schema = Joi.object().keys({
-      recipes_photo: Joi.required(),
-      recipes_title: Joi.any(),
-      recipes_ingredients: Joi.any(),
-      users_id: Joi.any(),
-      recipes_video: Joi.any(),
-    });
-    const { error, value } = schema.validate(req.body, {
-      abortEarly: false,
-    });
-    if (error) {
-      console.log(error);
-      return res.send(error.details);
-    }
     let recipes_photo = null;
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path);
@@ -143,6 +130,16 @@ const recipesController = {
         return next(createError(403, "ID is Not Found"));
       }
       await deleteRecipes(recipes_id);
+      commonHelper.response(res, {}, 200, "Recipe deleted");
+    } catch (error) {
+      next(error);
+    }
+  },
+  deleteRecipesByUsersId: async (req, res, next) => {
+    try {
+      const users_id = String(req.params.users_id);
+      const recipes_id = String(req.params.recipes_id);
+      await deleteRecipesByUsersId(users_id,recipes_id);
       commonHelper.response(res, {}, 200, "Recipe deleted");
     } catch (error) {
       next(error);
