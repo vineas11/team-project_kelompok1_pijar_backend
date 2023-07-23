@@ -7,9 +7,15 @@ const selectAllBookmarks = ({ limit, offset, sort, sortby }) => {
   );
 };
 
-// SELECT RICAPES BY product ID
+// SELECT RICAPES BY users id and recipes id
 const selectBookmarks = (users_id) => {
-  return Pool.query(`SELECT * FROM bookmarks WHERE users_id = '${users_id}'`);
+  return Pool.query(`
+  SELECT bookmarks.*, users.*, recipes.*
+  FROM bookmarks
+  LEFT JOIN users ON bookmarks.users_id = users.users_id
+  LEFT JOIN recipes ON bookmarks.recipes_id = recipes.recipes_id
+  WHERE bookmarks.users_id = '${users_id}'
+  `);
 };
 
 // INSERT Coments
@@ -55,12 +61,43 @@ const findID = (bookmarks_id) => {
   );
 };
 
+const findBookmarksRecipesId = (recipes_id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM bookmarks WHERE recipes_id='${recipes_id}'`,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
+
+const findBookmarksUsersId = (users_id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM bookmarks WHERE users_id='${users_id}'`,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
 module.exports = {
   selectAllBookmarks,
   selectBookmarks,
   insertBookmarks,
   updateBookmarks,
   deleteBookmarks,
+  findBookmarksRecipesId,
+  findBookmarksUsersId,
   countData,
   findID,
 };

@@ -7,9 +7,15 @@ const selectAllLikeds = ({ limit, offset, sort, sortby }) => {
   );
 };
 
-// SELECT RICAPES BY product ID
+// SELECT RICAPES BY users and recipes id
 const selectLikeds = (users_id) => {
-  return Pool.query(`SELECT * FROM likeds WHERE users_id = '${users_id}'`);
+  return Pool.query(`
+  SELECT likeds.*, users.*, recipes.*
+  FROM likeds
+  LEFT JOIN users ON likeds.users_id = users.users_id
+  LEFT JOIN recipes ON likeds.recipes_id = recipes.recipes_id
+  WHERE likeds.users_id = '${users_id}'
+  ` );
 };
 
 // INSERT Coments
@@ -55,12 +61,44 @@ const findID = (likeds_id) => {
   );
 };
 
+const findLikedsRecipesId = (recipes_id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM likeds WHERE recipes_id='${recipes_id}'`,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
+
+const findLikedsUsersId = (users_id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM likeds WHERE users_id='${users_id}'`,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   selectAllLikeds,
   selectLikeds,
   insertLikeds,
   updateLikeds,
   deleteLikeds,
+  findLikedsRecipesId,
+  findLikedsUsersId,
   countData,
   findID,
 };
