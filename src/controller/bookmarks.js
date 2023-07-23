@@ -1,4 +1,5 @@
 const commonHelper = require("../helper/common");
+const { v4: uuidv4 } = require("uuid");
 const {
   selectAllBookmarks,
   selectBookmarks,
@@ -36,7 +37,7 @@ const bookmarksController = {
         res,
         result.rows,
         200,
-        "get data success",
+        "get Data success",
         pagination
       );
     } catch (error) {
