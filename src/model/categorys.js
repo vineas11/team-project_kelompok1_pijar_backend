@@ -31,7 +31,7 @@ const updateCategorys = (data) => {
   );
 };
 
-// DELETE Categorys
+// DELETE Category
 const deleteCategorys = (categorys_id) => {
   return Pool.query(`DELETE FROM categorys WHERE categorys_id=${categorys_id}`);
 };

@@ -7,9 +7,15 @@ const selectAllLikeds = ({ limit, offset, sort, sortby }) => {
   );
 };
 
-// SELECT RICAPES BY product ID
+// SELECT RICAPES BY users and recipes id
 const selectLikeds = (users_id) => {
-  return Pool.query(`SELECT * FROM likeds WHERE users_id = '${users_id}'`);
+  return Pool.query(`
+  SELECT likeds.*, users.*, recipes.*
+  FROM likeds
+  LEFT JOIN users ON likeds.users_id = users.users_id
+  LEFT JOIN recipes ON likeds.recipes_id = recipes.recipes_id
+  WHERE likeds.users_id = '${users_id}'
+  ` );
 };
 
 // INSERT Coments
