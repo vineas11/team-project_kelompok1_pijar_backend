@@ -63,7 +63,7 @@ const bookmarksController = {
     const {
       rows: [count],
     } = await countData();
-    const bookmarks_id = Number(count.count) + 1;
+    const bookmarks_id = uuidv4();
 
     const data = {
       bookmarks_id,
