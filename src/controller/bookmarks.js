@@ -37,7 +37,7 @@ const bookmarksController = {
         res,
         result.rows,
         200,
-        "get data success",
+        "get Data success",
         pagination
       );
     } catch (error) {
