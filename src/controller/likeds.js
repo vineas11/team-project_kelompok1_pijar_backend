@@ -1,4 +1,5 @@
 const commonHelper = require("../helper/common");
+const { v4: uuidv4 } = require("uuid");
 const {
   selectAllLikeds,
   selectLikeds,
@@ -60,10 +61,6 @@ const likedsController = {
     if (RecipeLiked && UsersLiked) {
       return res.json({ message: "Like Already" });
     }
-    const {
-      rows: [count],
-    } = await countData();
-
     const likeds_id = uuidv4();
     const data = {
       likeds_id,
