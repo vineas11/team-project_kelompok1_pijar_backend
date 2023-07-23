@@ -9,7 +9,13 @@ const selectAllBookmarks = ({ limit, offset, sort, sortby }) => {
 
 // SELECT RICAPES BY product ID
 const selectBookmarks = (users_id) => {
-  return Pool.query(`SELECT * FROM bookmarks WHERE users_id = '${users_id}'`);
+  return Pool.query(`
+  SELECT bookmarks.*, users.*, recipes.*
+  FROM bookmarks
+  LEFT JOIN users ON bookmarks.users_id = users.users_id
+  LEFT JOIN recipes ON bookmarks.recipes_id = recipes.recipes_id
+  WHERE bookmarks.users_id = '${users_id}'
+  `);
 };
 
 // INSERT Coments
