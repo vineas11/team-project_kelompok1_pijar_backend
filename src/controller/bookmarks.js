@@ -74,15 +74,13 @@ const bookmarksController = {
       const bookmarks_id = Number(req.params.id);
       const { comment_text } = req.body;
       const { rowCount } = await findID(bookmarks_id);
-
       if (!rowCount) {
         res.json({ message: "ID Not Found" });
       }
       const data = {
-        comment_id,
+        bookmarks_id,
         recipes_id,
         users_id,
-        comment_text,
       };
       updateBookmarks(data)
         .then((result) =>
