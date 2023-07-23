@@ -7,7 +7,7 @@ const selectAllBookmarks = ({ limit, offset, sort, sortby }) => {
   );
 };
 
-// SELECT RICAPES BY product ID
+// SELECT RICAPES BY users id and recipes id
 const selectBookmarks = (users_id) => {
   return Pool.query(`
   SELECT bookmarks.*, users.*, recipes.*

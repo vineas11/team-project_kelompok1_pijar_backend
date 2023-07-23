@@ -7,7 +7,7 @@ const selectAllLikeds = ({ limit, offset, sort, sortby }) => {
   );
 };
 
-// SELECT RICAPES BY product ID
+// SELECT RICAPES BY users and recipes id
 const selectLikeds = (users_id) => {
   return Pool.query(`
   SELECT likeds.*, users.*, recipes.*
