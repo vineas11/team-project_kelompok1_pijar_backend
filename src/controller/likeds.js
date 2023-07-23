@@ -5,6 +5,8 @@ const {
   insertLikeds,
   updateLikeds,
   deleteLikeds,
+  findLikedsRecipesId,
+  findLikedsUsersId,
   countData,
   findID,
 } = require("../model/likeds");
@@ -53,9 +55,15 @@ const likedsController = {
 
   insertLikeds: async (req, res) => {
     const { recipes_id, users_id } = req.body;
+    const { rowCount: RecipeLiked } = await findLikedsRecipesId(recipes_id);
+    const { rowCount: UsersLiked } = await findLikedsUsersId(users_id);
+    if (RecipeLiked && UsersLiked) {
+      return res.json({ message: "Like Already" });
+    }
     const {
       rows: [count],
     } = await countData();
+
     const likeds_id = Number(count.count) + 1;
     const data = {
       likeds_id,
@@ -64,7 +72,7 @@ const likedsController = {
     };
     insertLikeds(data)
       .then((result) =>
-        commonHelper.response(res, result.rows, 201, "Comment Success")
+        commonHelper.response(res, result.rows, 201, "Like Success")
       )
       .catch((err) => res.send(err));
   },
