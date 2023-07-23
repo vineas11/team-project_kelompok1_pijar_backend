@@ -79,7 +79,6 @@ const likedsController = {
       const likeds_id = Number(req.params.id);
       const { comment_text } = req.body;
       const { rowCount } = await findID(likeds_id);
-
       if (!rowCount) {
         res.json({ message: "ID Not Found" });
       }
@@ -101,7 +100,7 @@ const likedsController = {
 
   deleteLikeds: async (req, res, next) => {
     try {
-      const likeds_id = Number(req.params.id);
+      const likeds_id = String(req.params.id);
       const { rowCount } = await findID(likeds_id);
 
       if (!rowCount) {

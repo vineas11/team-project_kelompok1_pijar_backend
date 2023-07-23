@@ -65,7 +65,6 @@ const bookmarksController = {
       rows: [count],
     } = await countData();
     const bookmarks_id = uuidv4();
-
     const data = {
       bookmarks_id,
       recipes_id,
@@ -103,7 +102,7 @@ const bookmarksController = {
 
   deleteBookmarks: async (req, res, next) => {
     try {
-      const bookmarks_id = Number(req.params.id);
+      const bookmarks_id = String(req.params.id);
       const { rowCount } = await findID(bookmarks_id);
 
       if (!rowCount) {
