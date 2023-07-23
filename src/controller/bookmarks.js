@@ -5,6 +5,8 @@ const {
   insertBookmarks,
   updateBookmarks,
   deleteBookmarks,
+  findBookmarksRecipesId,
+  findBookmarksUsersId,
   countData,
   findID,
 } = require("../model/bookmarks");
@@ -52,11 +54,17 @@ const bookmarksController = {
   },
 
   insertBookmarks: async (req, res) => {
-    const { recipes_id, users_id } = req.body;
+    let { recipes_id, users_id } = req.body;
+    const { rowCount: RecipeBook } = await findBookmarksRecipesId(recipes_id);
+    const { rowCount: UsersBook } = await findBookmarksUsersId(users_id);
+    if (RecipeBook && UsersBook) {
+      return res.json({ message: "Bookmarks Already" });
+    }
     const {
       rows: [count],
     } = await countData();
     const bookmarks_id = Number(count.count) + 1;
+
     const data = {
       bookmarks_id,
       recipes_id,
@@ -64,7 +72,7 @@ const bookmarksController = {
     };
     insertBookmarks(data)
       .then((result) =>
-        commonHelper.response(res, result.rows, 201, "Comment Success")
+        commonHelper.response(res, result.rows, 201, "Bookmark Success")
       )
       .catch((err) => res.send(err));
   },

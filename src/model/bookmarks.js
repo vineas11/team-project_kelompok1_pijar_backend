@@ -55,12 +55,43 @@ const findID = (bookmarks_id) => {
   );
 };
 
+const findBookmarksRecipesId = (recipes_id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM bookmarks WHERE recipes_id='${recipes_id}'`,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
+
+const findBookmarksUsersId = (users_id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM bookmarks WHERE users_id='${users_id}'`,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    )
+  );
+};
 module.exports = {
   selectAllBookmarks,
   selectBookmarks,
   insertBookmarks,
   updateBookmarks,
   deleteBookmarks,
+  findBookmarksRecipesId,
+  findBookmarksUsersId,
   countData,
   findID,
 };
