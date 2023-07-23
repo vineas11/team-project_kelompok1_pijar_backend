@@ -64,7 +64,7 @@ const likedsController = {
       rows: [count],
     } = await countData();
 
-    const likeds_id = Number(count.count) + 1;
+    const likeds_id = uuidv4();
     const data = {
       likeds_id,
       recipes_id,
