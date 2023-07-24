@@ -16,6 +16,16 @@ const {
   findUsersId,
 } = require("../model/recipes");
 
+const recipeSchema = Joi.object({
+  recipes_title: Joi.string().required(),
+  recipes_ingredients: Joi.string().required(),
+  users_id: Joi.string().required(),
+  recipes_video: Joi.string()
+    .uri({ scheme: ["http", "https"] })
+    .required()
+    .error(new Error("recipes_video must be a valid URL")),
+});
+
 const recipesController = {
   getAllRecipes: async (req, res) => {
     try {
@@ -68,6 +78,11 @@ const recipesController = {
   },
 
   insertRecipes: async (req, res) => {
+    const { error } = recipeSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errorMessages = error.details.map((err) => err.message);
+      return res.status(400).json({ errors: errorMessages });
+    }
     const { recipes_title, recipes_ingredients, users_id, recipes_video } =
       req.body;
     const recipes_id = uuidv4();
@@ -86,13 +101,18 @@ const recipesController = {
     };
     insertRecipes(data)
       .then((result) =>
-        commonHelper.response(res, result.rows, 201, "Create Product Success")
+        commonHelper.response(res, result.rows, 201, "Create Recipe Success")
       )
       .catch((err) => res.send(err));
   },
 
   updateRecipes: async (req, res) => {
     try {
+      const { error } = recipeSchema.validate(req.body, { abortEarly: false });
+      if (error) {
+        const errorMessages = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorMessages });
+      }
       const { recipes_title, recipes_ingredients, recipes_video } = req.body;
       const recipes_id = String(req.params.id);
       const { rowCount } = await findUUID(recipes_id);
