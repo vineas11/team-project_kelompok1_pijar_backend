@@ -60,7 +60,9 @@ const deleteRecipes = (recipes_id) => {
 };
 
 const deleteRecipesByUsersId = (users_id, recipes_id) => {
-  return Pool.query(`DELETE FROM recipes WHERE recipes.users_id='${users_id}' AND recipes.recipes_id='${recipes_id}'`);
+  return Pool.query(
+    `DELETE FROM recipes WHERE recipes.users_id='${users_id}' AND recipes.recipes_id='${recipes_id}'`
+  );
 };
 // COUNT DATA
 const countData = () => {
