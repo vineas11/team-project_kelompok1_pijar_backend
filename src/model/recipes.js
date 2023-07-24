@@ -1,10 +1,11 @@
 const Pool = require("../config/db");
 
 // GET ALL RECIPES
-const selectAllRecipes = ({ limit, offset, sort, sortby }) => {
+const selectAllRecipes = ({ limit, offset, sort, sortby, search }) => {
   return Pool.query(`
   SELECT *
   FROM recipes
+  WHERE recipes_title ILIKE '%${search}%'
   ORDER BY ${sortby} ${sort} LIMIT ${limit} OFFSET ${offset}`);
 };
 
