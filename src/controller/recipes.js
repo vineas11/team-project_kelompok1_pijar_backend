@@ -24,7 +24,14 @@ const recipesController = {
       const offset = (page - 1) * limit;
       const sortby = req.query.sortby || "recipes_id";
       const sort = req.query.sort || "ASC";
-      const result = await selectAllRecipes({ limit, offset, sort, sortby });
+      const search = req.query.search || "";
+      const result = await selectAllRecipes({
+        limit,
+        offset,
+        sort,
+        sortby,
+        search,
+      });
       const {
         rows: [count],
       } = await countData();
@@ -99,13 +106,11 @@ const recipesController = {
       if (!rowCount) {
         return next(createError(403, "ID is Not Found"));
       }
-
       let recipes_photo = null;
       if (req.file) {
         const result = await cloudinary.uploader.upload(req.file.path);
         recipes_photo = result.secure_url;
       }
-
       const data = {
         recipes_id,
         recipes_title,
@@ -139,7 +144,7 @@ const recipesController = {
     try {
       const users_id = String(req.params.users_id);
       const recipes_id = String(req.params.recipes_id);
-      await deleteRecipesByUsersId(users_id,recipes_id);
+      await deleteRecipesByUsersId(users_id, recipes_id);
       commonHelper.response(res, {}, 200, "Recipe deleted");
     } catch (error) {
       next(error);

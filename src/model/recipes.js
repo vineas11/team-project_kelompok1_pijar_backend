@@ -1,10 +1,11 @@
 const Pool = require("../config/db");
 
 // GET ALL RECIPES
-const selectAllRecipes = ({ limit, offset, sort, sortby }) => {
+const selectAllRecipes = ({ limit, offset, sort, sortby, search }) => {
   return Pool.query(`
   SELECT *
   FROM recipes
+  WHERE recipes_title ILIKE '%${search}%'
   ORDER BY ${sortby} ${sort} LIMIT ${limit} OFFSET ${offset}`);
 };
 
@@ -60,7 +61,9 @@ const deleteRecipes = (recipes_id) => {
 };
 
 const deleteRecipesByUsersId = (users_id, recipes_id) => {
-  return Pool.query(`DELETE FROM recipes WHERE recipes.users_id='${users_id}' AND recipes.recipes_id='${recipes_id}'`);
+  return Pool.query(
+    `DELETE FROM recipes WHERE recipes.users_id='${users_id}' AND recipes.recipes_id='${recipes_id}'`
+  );
 };
 // COUNT DATA
 const countData = () => {
