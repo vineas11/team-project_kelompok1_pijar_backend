@@ -19,6 +19,7 @@ const {
 const recipeSchema = Joi.object({
   recipes_title: Joi.string().required(),
   recipes_ingredients: Joi.string().required(),
+  users_id: Joi.string().required(),
   recipes_video: Joi.string(),
 });
 
