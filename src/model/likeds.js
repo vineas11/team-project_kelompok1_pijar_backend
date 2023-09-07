@@ -23,7 +23,7 @@ const insertLikeds = (data) => {
   const { likeds_id, recipes_id, users_id } = data;
   return Pool.query(
     `INSERT INTO likeds (likeds_id, recipes_id, users_id) 
-    VALUES('${likeds_id}', '${recipes_id}', '${users_id}' )`
+    VALUES('${likeds_id}', '${recipes_id}', '${users_id}')`
   );
 };
 

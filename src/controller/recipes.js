@@ -16,6 +16,12 @@ const {
   findUsersId,
 } = require("../model/recipes");
 
+const recipeSchema = Joi.object({
+  recipes_title: Joi.string().required(),
+  recipes_ingredients: Joi.string().required(),
+  recipes_video: Joi.string(),
+});
+
 const recipesController = {
   getAllRecipes: async (req, res) => {
     try {
@@ -68,8 +74,19 @@ const recipesController = {
   },
 
   insertRecipes: async (req, res) => {
-    const { recipes_title, recipes_ingredients, users_id, recipes_video } =
-      req.body;
+    const { error } = recipeSchema.validate(req.body, {
+      abortEarly: false,
+    });
+    if (error) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    const {
+      recipes_title,
+      recipes_ingredients,
+      users_id,
+      recipes_video,
+    } = req.body;
     const recipes_id = uuidv4();
     let recipes_photo = null;
     if (req.file) {
@@ -86,20 +103,28 @@ const recipesController = {
     };
     insertRecipes(data)
       .then((result) =>
-        commonHelper.response(res, result.rows, 201, "Create Product Success")
+        commonHelper.response(res, result.rows, 201, "Create Recipe Success")
       )
       .catch((err) => res.send(err));
   },
 
   updateRecipes: async (req, res) => {
     try {
+      const { error } = recipeSchema.validate(req.body, {
+        abortEarly: false,
+      });
+      if (error) {
+        res.status(400).json({ message: error.message });
+        return;
+      }
       const { recipes_title, recipes_ingredients, recipes_video } = req.body;
       const recipes_id = String(req.params.id);
       const { rowCount } = await findUUID(recipes_id);
       if (!rowCount) {
         return next(createError(403, "ID is Not Found"));
       }
-
+      const getUserId = await selectRecipesById(recipes_id);
+      const recipes = getUserId.rows[0];
       let recipes_photo = null;
       if (req.file) {
         const result = await cloudinary.uploader.upload(req.file.path);
@@ -108,10 +133,10 @@ const recipesController = {
 
       const data = {
         recipes_id,
-        recipes_title,
-        recipes_ingredients,
-        recipes_photo,
-        recipes_video,
+        recipes_title: recipes_title || recipes.recipes_title,
+        recipes_ingredients: recipes_ingredients || recipes.recipes_ingredients,
+        recipes_photo: recipes_photo || recipes.recipes_photo,
+        recipes_video: recipes_video || recipes.recipes_video,
       };
       updateRecipes(data)
         .then((result) =>
@@ -139,7 +164,7 @@ const recipesController = {
     try {
       const users_id = String(req.params.users_id);
       const recipes_id = String(req.params.recipes_id);
-      await deleteRecipesByUsersId(users_id,recipes_id);
+      await deleteRecipesByUsersId(users_id, recipes_id);
       commonHelper.response(res, {}, 200, "Recipe deleted");
     } catch (error) {
       next(error);
