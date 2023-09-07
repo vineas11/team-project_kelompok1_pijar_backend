@@ -325,7 +325,7 @@ Documentation files are provided in the [docs](./docs) folder
 
 API endpoint list are also available as published postman documentation
 
-[![Run in Postman]()
+[![Run in Postman](https://documenter.getpostman.com/view/28616224/2s9YBz2aXD)
 
 ## Related Project
 
