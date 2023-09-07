@@ -4,7 +4,9 @@
     <img height="150" src="https://github.com/vineas11/team-project_kelompok1_pijar_backend/assets/80002249/435322f9-5489-4c43-a950-50859678b5cc" alt="blanja" border="0"/>
   </div>
   <h3 align="center">Mama Recipe</h3>
-     <a href="https://team-project-kelompok1-pijar-backend.vercel.app/">Api Demo</a> -->
+   <p align="center">
+     <a href="https://team-project-kelompok1-pijar-backend.vercel.app/">Api Demo</a>
+       </p>
   </p>
 
 # Mama Recipes
