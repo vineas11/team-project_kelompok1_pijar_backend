@@ -1,13 +1,13 @@
-![logo_1_1](https://github.com/vineas11/team-project_kelompok1_pijar_backend/assets/80002249/435322f9-5489-4c43-a950-50859678b5cc)<br />
+<br />
 <p align="center">
   <div align="center">
-    <img height="150" src="https://cdn.discordapp.com/attachments/1118733891738554480/1146038619325349898/logo-removebg-preview.png" alt="blanja" border="0"/>
+    <img height="150" src="https://github.com/vineas11/team-project_kelompok1_pijar_backend/assets/80002249/435322f9-5489-4c43-a950-50859678b5cc" alt="blanja" border="0"/>
   </div>
   <h3 align="center">Mama Recipe</h3>
      <a href="https://team-project-kelompok1-pijar-backend.vercel.app/">Api Demo</a> -->
   </p>
 
-# Recipes-Club
+# Mama Recipes
 Find your recipes
 
 And make delicious food
