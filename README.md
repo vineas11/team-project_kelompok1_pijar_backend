@@ -329,11 +329,11 @@ API endpoint list are also available as published postman documentation
 
 ## Related Project
 
-:rocket: [`Backend Blanja`](https://github.com/vineas11/team-project_kelompok1_pijar_backend)
+:rocket: [`Backend Recipes`](https://github.com/vineas11/team-project_kelompok1_pijar_backend)
 
-:rocket: [`Frontend Blanja`](https://github.com/vineas/team-project_kelompok1_pijar_frontend)
+:rocket: [`Frontend Recipes`](https://github.com/vineas/team-project_kelompok1_pijar_frontend)
 
-:rocket: [`Demo Blanja`](https://team-project-kelompok1-pijar-frontend.vercel.app/home)
+:rocket: [`Demo Recipes`](https://team-project-kelompok1-pijar-frontend.vercel.app/home)
 
 Project link : [https://github.com/sandriirawan/Fe_Blanja_React](https://github.com/vineas/team-project_kelompok1_pijar_frontend)]
 
