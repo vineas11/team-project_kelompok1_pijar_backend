@@ -1,3 +1,4 @@
+-- Active: 1693929640533@@147.139.210.135@5432@sandri02
 -- TABLE USERS
 CREATE TABLE users
 (
@@ -33,14 +34,16 @@ CREATE TABLE comments
 
 CREATE TABLE likeds
 (
-    likeds_id INT PRIMARY KEY,
+    likeds_id VARCHAR PRIMARY KEY,
     recipes_id VARCHAR(255),
     users_id VARCHAR(255)
 );
 
+DROP TABLE comments
+
 CREATE TABLE bookmarks
 (
-    bookmarks_id INT PRIMARY KEY,
+    bookmarks_id VARCHAR PRIMARY KEY,
     recipes_id VARCHAR(255),
     users_id VARCHAR(255)
 );

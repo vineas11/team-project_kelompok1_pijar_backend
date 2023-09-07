@@ -23,7 +23,7 @@ const insertBookmarks = (data) => {
   const { bookmarks_id, recipes_id, users_id } = data;
   return Pool.query(
     `INSERT INTO bookmarks (bookmarks_id, recipes_id, users_id) 
-    VALUES(${bookmarks_id}, '${recipes_id}', '${users_id}' )`
+    VALUES('${bookmarks_id}', '${recipes_id}', '${users_id}' )`
   );
 };
 
@@ -31,13 +31,15 @@ const insertBookmarks = (data) => {
 const updateBookmarks = (data) => {
   const { bookmarks_id, recipes_id, users_id } = data;
   return Pool.query(
-    `UPDATE bookmarks SET recipes_id='${recipes_id}' users_id='${users_id}' WHERE bookmarks_id=${bookmarks_id}`
+    `UPDATE bookmarks SET recipes_id='${recipes_id}' users_id='${users_id}' WHERE bookmarks_id='${bookmarks_id}'`
   );
 };
 
 // DELETE Coments
 const deleteBookmarks = (bookmarks_id) => {
-  return Pool.query(`DELETE FROM bookmarks WHERE bookmarks_id=${bookmarks_id}`);
+  return Pool.query(
+    `DELETE FROM bookmarks WHERE bookmarks_id='${bookmarks_id}'`
+  );
 };
 
 // COUNT DATA
@@ -49,7 +51,7 @@ const countData = () => {
 const findID = (bookmarks_id) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT bookmarks FROM bookmarks WHERE bookmarks_id=${bookmarks_id}`,
+      `SELECT bookmarks FROM bookmarks WHERE bookmarks_id='${bookmarks_id}'`,
       (error, result) => {
         if (!error) {
           resolve(result);
