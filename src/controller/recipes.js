@@ -19,11 +19,7 @@ const {
 const recipeSchema = Joi.object({
   recipes_title: Joi.string().required(),
   recipes_ingredients: Joi.string().required(),
-  users_id: Joi.string().required(),
-  recipes_video: Joi.string()
-    .uri({ scheme: ["http", "https"] })
-    .required()
-    .error(new Error("recipes_video must be a valid URL")),
+  recipes_video: Joi.string(),
 });
 
 const recipesController = {
@@ -78,13 +74,19 @@ const recipesController = {
   },
 
   insertRecipes: async (req, res) => {
-    const { error } = recipeSchema.validate(req.body, { abortEarly: false });
+    const { error } = recipeSchema.validate(req.body, {
+      abortEarly: false,
+    });
     if (error) {
-      const errorMessages = error.details.map((err) => err.message);
-      return res.status(400).json({ errors: errorMessages });
+      res.status(400).json({ message: error.message });
+      return;
     }
-    const { recipes_title, recipes_ingredients, users_id, recipes_video } =
-      req.body;
+    const {
+      recipes_title,
+      recipes_ingredients,
+      users_id,
+      recipes_video,
+    } = req.body;
     const recipes_id = uuidv4();
     let recipes_photo = null;
     if (req.file) {
@@ -108,10 +110,12 @@ const recipesController = {
 
   updateRecipes: async (req, res) => {
     try {
-      const { error } = recipeSchema.validate(req.body, { abortEarly: false });
+      const { error } = recipeSchema.validate(req.body, {
+        abortEarly: false,
+      });
       if (error) {
-        const errorMessages = error.details.map((err) => err.message);
-        return res.status(400).json({ errors: errorMessages });
+        res.status(400).json({ message: error.message });
+        return;
       }
       const { recipes_title, recipes_ingredients, recipes_video } = req.body;
       const recipes_id = String(req.params.id);
@@ -119,7 +123,8 @@ const recipesController = {
       if (!rowCount) {
         return next(createError(403, "ID is Not Found"));
       }
-
+      const getUserId = await selectRecipesById(recipes_id);
+      const recipes = getUserId.rows[0];
       let recipes_photo = null;
       if (req.file) {
         const result = await cloudinary.uploader.upload(req.file.path);
@@ -128,10 +133,10 @@ const recipesController = {
 
       const data = {
         recipes_id,
-        recipes_title,
-        recipes_ingredients,
-        recipes_photo,
-        recipes_video,
+        recipes_title: recipes_title || recipes.recipes_title,
+        recipes_ingredients: recipes_ingredients || recipes.recipes_ingredients,
+        recipes_photo: recipes_photo || recipes.recipes_photo,
+        recipes_video: recipes_video || recipes.recipes_video,
       };
       updateRecipes(data)
         .then((result) =>
@@ -159,7 +164,7 @@ const recipesController = {
     try {
       const users_id = String(req.params.users_id);
       const recipes_id = String(req.params.recipes_id);
-      await deleteRecipesByUsersId(users_id,recipes_id);
+      await deleteRecipesByUsersId(users_id, recipes_id);
       commonHelper.response(res, {}, 200, "Recipe deleted");
     } catch (error) {
       next(error);

@@ -125,8 +125,10 @@ let usersController = {
       if (!rowCount) {
         res.json({ message: "ID Not Found" });
       }
+      const getUserId = await selectUsers(users_id);
+      const user = getUserId.rows[0];
       const schema = Joi.object().keys({
-        users_name: Joi.string().required(),
+        users_name: Joi.string(),
         users_phone: Joi.string().min(10).max(12),
         users_photo: Joi.any(),
       });
@@ -144,8 +146,8 @@ let usersController = {
       }
       const data = {
         users_id,
-        users_name,
-        users_phone,
+        users_name:users_name || user.users_name,
+        users_phone:users_phone || user.users_phone,
         users_photo,
       };
 

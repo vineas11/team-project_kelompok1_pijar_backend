@@ -1,3 +1,4 @@
+-- Active: 1693929640533@@147.139.210.135@5432@sandri02
 -- TABLE USERS
 CREATE TABLE users
 (
@@ -37,6 +38,8 @@ CREATE TABLE likeds
     recipes_id VARCHAR(255),
     users_id VARCHAR(255)
 );
+
+DROP TABLE comments
 
 CREATE TABLE bookmarks
 (
